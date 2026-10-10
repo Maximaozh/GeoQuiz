@@ -2,23 +2,29 @@
 
     import android.annotation.SuppressLint
     import android.os.Bundle
+    import android.widget.Button
     import androidx.activity.ComponentActivity
     import androidx.activity.compose.setContent
     import androidx.activity.enableEdgeToEdge
     import androidx.compose.foundation.layout.Arrangement
     import androidx.compose.foundation.layout.Column
+    import androidx.compose.foundation.layout.Row
     import androidx.compose.foundation.layout.fillMaxSize
+    import androidx.compose.foundation.layout.fillMaxWidth
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.width
+    import androidx.compose.material3.Button
     import androidx.compose.material3.Scaffold
     import androidx.compose.material3.Text
     import androidx.compose.runtime.Composable
+    import androidx.compose.runtime.LaunchedEffect
     import androidx.compose.runtime.getValue
     import androidx.compose.runtime.mutableStateListOf
     import androidx.compose.runtime.mutableStateOf
     import androidx.compose.runtime.remember
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
+    import androidx.compose.ui.Alignment.Companion.CenterVertically
     import androidx.compose.ui.Modifier
     import androidx.compose.ui.tooling.preview.Preview
     import androidx.compose.ui.unit.dp
@@ -31,9 +37,13 @@
             enableEdgeToEdge()
             setContent {
                 GeoQuizTheme {
-                    Scaffold(modifier = Modifier.fillMaxSize()) { unuesd -> MainLayour(); }
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        MainLayout();
+                    }
                 }
             }
+        }
+
 
             class QuizElement
             {
@@ -75,17 +85,56 @@
                 val answers = mutableStateListOf<UserAnswer>()
             }
 
-
+            @Preview
             @Composable
-            fun MainLayour()
+            fun MainLayout()
             {
-                var appState = AppState();
-                var dataBank = DataBank();
+                val appState = remember { AppState() }
+                val dataBank = remember { DataBank() }
 
-                appState.bankSize = dataBank.QuizList.size;
+                LaunchedEffect(Unit) {
+                    appState.bankSize = dataBank.QuizList.size
+                }
+
+                QuestionElement(appState,dataBank);
+                SwitchButton(appState,dataBank);
             }
 
 
-        }
+            @Composable
+            fun QuestionElement(appState: AppState, dataBank: DataBank)
+            {
+                Column(
+                    modifier = Modifier.padding(16.dp).fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                )
+                {
+                    Text(
+                        text = $"",
+                        modifier = Modifier.width(150.dp)
+                    )
+                }
+            }
+
+            @Composable
+            fun SwitchButton(appState: AppState, dataBank: DataBank) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    Button(
+                        onClick = {
+                            if (appState.selectedCardId < appState.bankSize - 1) {
+                                appState.selectedCardId++
+                            }
+                        },
+                        enabled = appState.selectedCardId < appState.bankSize - 1
+                    ) {
+                        Text("Next")
+                    }
+                }
+            }
     }
 
