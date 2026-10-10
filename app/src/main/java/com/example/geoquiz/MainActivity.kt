@@ -35,6 +35,33 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        class QuizElement
+        {
+            var Question = "DEFAULT_QUESTION"
+            var IsCorrect = false;
+
+            constructor(question: String, isCorrect: Boolean)
+            {
+                this.Question = question;
+                this.IsCorrect = isCorrect;
+            }
+        };
+
+        class DataBank{
+            var QuizList: MutableList<QuizElement> = mutableListOf();
+
+            constructor()
+            {
+                QuizList.add(QuizElement("Canberra is the capital of Australia.", true));
+                QuizList.add(QuizElement("The Pacific Ocean is larger than the Atlantic Ocean. ", true));
+                QuizList.add(QuizElement("The Suez Canal connects the Red Sea and the Indian Ocean.", false));
+                QuizList.add(QuizElement("The source of the Nile River is in Egypt. ", false));
+                QuizList.add(QuizElement("The Amazon River is the longest river in the Americas.", true));
+                QuizList.add(QuizElement("Lake Baikal is the world's oldest and deepest freshwater lake.", true));
+            }
+        }
+
+
     }
 }
 
